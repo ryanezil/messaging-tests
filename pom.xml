@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <!-- See https://maven.apache.org/pom/asf/ -->
+    <groupId>org.apache</groupId>
+    <artifactId>apache</artifactId>
+    <version>23</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>local.test.jms</groupId>
+  <artifactId>examples</artifactId>
+  <name>Messaging tests</name>
+  <description>Messaging tests</description>
+  <packaging>jar</packaging>
+  <inceptionYear>2022</inceptionYear>
+
+
+  <properties>
+
+    <slf4j-version>1.7.36</slf4j-version>
+
+    <maven-eclipse-plugin-version>2.10</maven-eclipse-plugin-version>
+    <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+    <surefire.runOrder>filesystem</surefire.runOrder>
+    <maven-enforcer-plugin-version>3.0.0-M3</maven-enforcer-plugin-version>
+
+
+    <!-- Maven Plugin Versions for this Project -->
+    <maven-javacc-plugin-version>2.6</maven-javacc-plugin-version>
+    <maven-idea-plugin-version>2.5</maven-idea-plugin-version>
+    <maven-bundle-plugin-version>5.1.2</maven-bundle-plugin-version>
+
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j-version}</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+<!-- mqtt 3.1 and 3.1.1 -->
+<dependency>
+  <groupId>org.eclipse.paho</groupId>
+  <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+  <version>1.2.0</version>
+</dependency>
+
+    <!-- Provide a logging implementation to avoid
+         notice from SLF4J that none was found -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+    </dependency>
+   
+  </dependencies>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <runOrder>${surefire.runOrder}</runOrder>
+            <redirectTestOutputToFile>${maven.test.redirectTestOutputToFile}</redirectTestOutputToFile>
+            <forkCount>1</forkCount>
+            <reuseForks>true</reuseForks>
+            <systemPropertyVariables>
+                <java.awt.headless>true</java.awt.headless>
+            </systemPropertyVariables>
+            <failIfNoTests>false</failIfNoTests>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>${maven-eclipse-plugin-version}</version>
+          <configuration>
+            <downloadSources>true</downloadSources>
+            <downloadJavadocs>true</downloadJavadocs>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${maven-enforcer-plugin-version}</version>
+        </plugin>
+
+
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <optimize>true</optimize>
+          <debug>true</debug>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-java-version</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>[11,)</version>
+                  <message>You must use Java 11+ to build</message>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+            </execution>
+            <execution>
+              <id>enforce-maven-version</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>3.5.0</version>
+                    <message>You must use Maven 3.5.0+ to build</message>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
+            </execution>
+        </executions>
+        </plugin>
+    </plugins>
+  </build>
+
+</project>
